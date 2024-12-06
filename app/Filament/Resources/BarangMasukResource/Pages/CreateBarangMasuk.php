@@ -10,15 +10,21 @@ class CreateBarangMasuk extends CreateRecord
 {
     protected static string $resource = BarangMasukResource::class;
     protected static ?string $title = 'Tambah Data Barang Masuk';
+
+    // Redirect ke halaman index setelah berhasil menyimpan data
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');
     }
+
+    // Pesan Toast
     protected function getCreatedNotificationMessage(): ?string
     {
         return 'Data berhasil disimpan'; // Ubah pesan toast
     }
 
+
+    // Button Simpan dan Batal
     protected function getFormActions(): array
     {
         return [
@@ -41,8 +47,10 @@ class CreateBarangMasuk extends CreateRecord
                 ->icon('heroicon-o-x-circle'),
         ];
     }
+
+    // Hapus error validasi pada field yang diperbarui
     public function updated($propertyName)
     {
-        $this->resetValidation($propertyName); // Hapus error validasi pada field yang diperbarui
+        $this->resetValidation($propertyName);
     }
 }

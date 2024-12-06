@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources\BarangKeluarResource\Pages;
 
-use App\Filament\Resources\BarangKeluarResource;
 use Filament\Actions;
-use Filament\Pages\Actions\Modal\Actions\ButtonAction;
+use App\Models\StokBarang;
 use Filament\Resources\Pages\CreateRecord;
+use App\Filament\Resources\BarangKeluarResource;
+use Filament\Pages\Actions\Modal\Actions\ButtonAction;
 
 class CreateBarangKeluar extends CreateRecord
 {
@@ -47,8 +48,9 @@ class CreateBarangKeluar extends CreateRecord
     }
 
     // Hapus error validasi pada field yang diperbarui
-    public function updated($propertyName)
+    public function updated($propertyName, $value)
     {
         $this->resetValidation($propertyName); // Hapus error validasi
+
     }
 }

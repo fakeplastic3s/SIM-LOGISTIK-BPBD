@@ -94,28 +94,33 @@ class BarangKeluarResource extends Resource
                                     ->required()
                                     ->numeric()
                                     ->reactive()
+                                    ->default(0)
+                                    ->disabled(fn($get) => !$get('id_barang'))
                                     ->rule(function ($get) {
                                         $id = $get('id');
                                         $itemId = $get('id_barang');
                                         $itemStock = \App\Models\StokBarang::where('id', $itemId)->value('stok');
                                         $originalJumlah = \App\Models\detailBarangKeluar::where('id', $id)->value('jumlah_keluar'); // Ambil data lama
                                         $newJumlah = $get('jumlah_keluar'); // Data baru
-                                        $quantityDifference = $newJumlah - $originalJumlah; // Hitung selisih jumlah
+                                        if ($newJumlah != null) {
+                                            $quantityDifference = $newJumlah - $originalJumlah;
+                                            // Abaikan validasi jika stok kosong dan jumlah data baru lebih kecil dari sebelumnya
+                                            if ($itemStock === 0 && $newJumlah < $originalJumlah) {
+                                                return null;
+                                            }
 
-                                        // Abaikan validasi jika stok kosong dan jumlah data baru lebih kecil dari sebelumnya
-                                        if ($itemStock === 0 && $newJumlah < $originalJumlah) {
-                                            return null;
+                                            // Larang input jika stok tidak valid
+                                            if ($itemStock === null || $itemStock < 0) {
+                                                return "prohibited";
+                                            }
+
+                                            // Validasi stok kurang dari selisih quantity
+                                            if ($quantityDifference > 0 && $itemStock < $quantityDifference) {
+                                                return "prohibited"; // Pengecekan custom, stok tidak mencukupi
+                                            } // Hitung selisih jumlah
                                         }
 
-                                        // Larang input jika stok tidak valid
-                                        if ($itemStock === null || $itemStock < 0) {
-                                            return "prohibited";
-                                        }
 
-                                        // Validasi stok kurang dari selisih quantity
-                                        if ($quantityDifference > 0 && $itemStock < $quantityDifference) {
-                                            return "prohibited"; // Pengecekan custom, stok tidak mencukupi
-                                        }
 
                                         return null; // Jika validasi lolos
                                     })
