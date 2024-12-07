@@ -7,7 +7,10 @@ use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
 use Filament\Enums\ThemeMode;
+use Filament\Facades\Filament;
 use Filament\Support\Colors\Color;
+use app\filament\Widgets\StatsOverview;
+use app\filament\Widgets\KedaluwarsaList;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -18,8 +21,6 @@ use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
-use app\filament\Widgets\KedaluwarsaList;
-use app\filament\Widgets\StatsOverview;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -31,9 +32,12 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->colors([
+                'danger' => Color::Red,
+                'gray' => Color::Zinc,
+                'info' => Color::Blue,
                 'primary' => Color::Amber,
-                'secondary' => Color::Gray,
-                'tertiary' => Color::Indigo,
+                'success' => Color::Green,
+                'warning' => Color::Amber,
             ])
             ->font('Poppins')
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
@@ -68,6 +72,6 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('SIM-Log')
             ->spa()
             // ->topNavigation()
-            ->sidebarCollapsibleOnDesktop();;
+            ->sidebarCollapsibleOnDesktop();
     }
 }

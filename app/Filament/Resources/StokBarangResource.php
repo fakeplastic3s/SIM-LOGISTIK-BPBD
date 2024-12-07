@@ -8,6 +8,8 @@ use Filament\Forms\Form;
 use App\Models\StokBarang;
 use Filament\Tables\Table;
 use Filament\Resources\Resource;
+use Filament\Tables\Actions\Action;
+use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
@@ -16,6 +18,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\StokBarangResource\Pages;
 use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 use App\Filament\Resources\StokBarangResource\RelationManagers;
+
+
 
 class StokBarangResource extends Resource
 {
@@ -109,6 +113,15 @@ class StokBarangResource extends Resource
                 // Tables\Actions\BulkActionGroup::make([
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
+                // BulkAction::make('cetak_pilih')
+                //     ->label('Cetak Laporan')
+                //     ->icon('heroicon-s-printer')
+                //     ->color('info')
+                //     ->url(function ($records) {
+                //         $ids = $records->pluck('id')->join(',');
+                //         return route('stok-barang.pdf', ['ids' => $ids]);
+                //     })
+                //     ->openUrlInNewTab(),
                 ExportBulkAction::make()->exports([
                     // setting nama file export
                     ExcelExport::make()->fromTable()->withFilename('Data Logistik-' . date('d F Y His')),
