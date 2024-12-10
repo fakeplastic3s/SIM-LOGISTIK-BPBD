@@ -33,7 +33,7 @@ use Awcodes\TableRepeater\Components\TableRepeater;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\BarangKeluarResource\Pages;
 use App\Filament\Resources\BarangKeluarResource\RelationManagers;
-
+use App\Models\DetailBarangKeluar;
 
 class BarangKeluarResource extends Resource
 {
@@ -274,6 +274,12 @@ class BarangKeluarResource extends Resource
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ViewAction::make(),
+                Tables\Actions\Action::make('print')
+                    ->label('Cetak')
+                    ->icon('heroicon-s-printer')
+                    ->color('info')
+                    ->url(fn(BarangKeluar $record) => route('distribusi.print', $record))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
