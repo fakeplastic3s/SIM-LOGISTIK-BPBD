@@ -80,6 +80,8 @@ class BarangKeluarResource extends Resource
                                     ->label('Nama Barang')
                                     ->required()
                                     ->reactive()
+                                    ->searchable()
+                                    ->preload()
                                     ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->orderBy('tanggal_exp', 'asc'))
 
                                     ->getOptionLabelFromRecordUsing(function (StokBarang $record) {
@@ -197,7 +199,7 @@ class BarangKeluarResource extends Resource
                             ->label('Upload Gambar')
                             ->image()
                             ->directory('img/bukti') // Simpan file di folder storage/app/public/images/barang-keluar
-                            ->disk('public')
+                            // ->disk('public')
                             ->image()
                             ->maxSize(10240)
                             ->helperText('Unggah gambar terkait foto serah terima logistik. Ukuran maksimal: 10MB.')
@@ -266,6 +268,11 @@ class BarangKeluarResource extends Resource
                         'selesai' => 'success',
                     })
                     ->label('Status'),
+                ImageColumn::make('foto')
+                    ->label('Bukti Gambar')
+                    ->height(50)
+                    ->width(50),
+
             ])
             ->filters([
                 //
@@ -342,7 +349,6 @@ class BarangKeluarResource extends Resource
                             ),
                         ImageEntry::make('foto')
                             ->label('Bukti Gambar')
-                            ->disk('public')
                             ->height(200)
                             ->width(200),
 

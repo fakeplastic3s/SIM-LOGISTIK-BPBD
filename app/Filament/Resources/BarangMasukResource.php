@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\BarangMasukResource\Pages;
 use App\Filament\Resources\BarangMasukResource\RelationManagers;
+use App\Models\Barang;
 use App\Models\StokBarang;
 
 class BarangMasukResource extends Resource
@@ -52,9 +53,9 @@ class BarangMasukResource extends Resource
                             ->label('Nama Barang')
                             ->required()
                             ->reactive()
-                            // ->relationship('StokBarang', 'merk')
+                            ->searchable()
+                            ->preload()
                             ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->orderBy('tanggal_exp', 'asc'))
-
                             ->getOptionLabelFromRecordUsing(function (StokBarang $record) {
                                 $expDate = $record->tanggal_exp ? " (Expired " . Carbon::parse($record->tanggal_exp)->translatedFormat('j F Y') . ")" : "";
                                 return "{$record->merk}{$expDate}";
