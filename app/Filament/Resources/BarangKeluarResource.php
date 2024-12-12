@@ -96,7 +96,6 @@ class BarangKeluarResource extends Resource
                                     ->required()
                                     ->numeric()
                                     ->reactive()
-                                    ->default(0)
                                     ->disabled(fn($get) => !$get('id_barang'))
                                     ->rule(function ($get) {
                                         $id = $get('id');
@@ -247,18 +246,6 @@ class BarangKeluarResource extends Resource
                             ->map(fn($detail) => "{$detail->StokBarang->barang->nama_barang} {$detail->StokBarang->merk} ({$detail->jumlah_keluar} {$detail->StokBarang->satuan})")
                             ->implode(', ');
                     }),
-                // Group::make()
-                //     ->schema([
-                //         TextEntry::make('detailBarangKeluar')
-                //             ->label('Detail Barang')
-                //             ->state(
-                //                 fn($record) =>
-                //                 $record->detailBarangKeluar->map(
-                //                     fn($detail) =>
-                //                     "{$detail->barang->nama_barang} ({$detail->jumlah_keluar} {$detail->satuan})"
-                //                 )->implode(', ')
-                //             ),
-                //     ]),
                 IconColumn::make('status')
                     ->icon(fn(string $state): string => match ($state) {
                         'proses' => 'heroicon-o-clock',
@@ -268,10 +255,10 @@ class BarangKeluarResource extends Resource
                         'selesai' => 'success',
                     })
                     ->label('Status'),
-                ImageColumn::make('foto')
-                    ->label('Bukti Gambar')
-                    ->height(50)
-                    ->width(50),
+                // ImageColumn::make('foto')
+                //     ->label('Bukti Gambar')
+                //     ->height(50)
+                //     ->width(50),
 
             ])
             ->filters([

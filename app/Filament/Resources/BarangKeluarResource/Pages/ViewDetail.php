@@ -21,7 +21,7 @@ class ViewDetail extends ViewRecord
             Actions\Action::make('back_to_list')
                 ->icon('heroicon-m-arrow-uturn-left')
                 ->label('Kembali')
-                ->url(url()->previous())
+                ->url(url('admin/barang-keluars'))
         ];
     }
 }
