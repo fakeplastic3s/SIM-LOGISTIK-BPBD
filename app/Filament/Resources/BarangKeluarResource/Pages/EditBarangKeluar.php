@@ -29,4 +29,9 @@ class EditBarangKeluar extends EditRecord
                 ->url('/admin/barang-keluars')
         ];
     }
+
+    public function getBreadcrumb(): string
+    {
+        return 'Edit Data';
+    }
 }

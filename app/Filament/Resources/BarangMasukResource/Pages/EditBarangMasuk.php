@@ -21,6 +21,12 @@ class EditBarangMasuk extends EditRecord
                 ->url(url()->previous())
         ];
     }
+
+    public function getBreadcrumb(): string
+    {
+        return 'Edit Data';
+    }
+
     protected function getRedirectUrl(): string
     {
         return $this->getResource()::getUrl('index');

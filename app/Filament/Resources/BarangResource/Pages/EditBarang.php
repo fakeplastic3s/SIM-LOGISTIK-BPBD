@@ -16,4 +16,9 @@ class EditBarang extends EditRecord
     {
         return $this->getResource()::getUrl('index');
     }
+
+    public function getBreadcrumb(): string
+    {
+        return 'Edit Data';
+    }
 }

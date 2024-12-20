@@ -19,4 +19,8 @@ class ListBarangs extends ListRecords
 
         ];
     }
+    public function getBreadcrumb(): string
+    {
+        return 'Data Barang';
+    }
 }

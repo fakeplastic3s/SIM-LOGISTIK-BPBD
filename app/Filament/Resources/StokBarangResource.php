@@ -26,6 +26,8 @@ class StokBarangResource extends Resource
     protected static ?string $model = StokBarang::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?int $navigationSort = 2;
+    protected static ?string $navigationGroup = 'Laporan';
 
     public static function form(Form $form): Form
     {
@@ -55,11 +57,14 @@ class StokBarangResource extends Resource
                 TextColumn::make('stok')
                     ->label('Stok')
                     ->searchable()
-                    ->sortable(),
-                TextColumn::make('satuan')
-                    ->label('Satuan')
-                    ->searchable()
-                    ->sortable(),
+                    ->sortable()
+                    ->formatStateUsing(function ($record) {
+                        return $record->stok . ' ' . $record->satuan;
+                    }),
+                // TextColumn::make('satuan')
+                //     ->label('Satuan')
+                //     ->searchable()
+                //     ->sortable(),
                 // TextColumn::make('stok')
                 //     ->label('Detail Barang')
                 //     ->limit(15)
@@ -84,18 +89,26 @@ class StokBarangResource extends Resource
                         $now = \Carbon\Carbon::now()->startOfDay(); // Mengatur waktu saat ini menjadi 00:00
                         $daysRemaining = $now->diffInDays($expDate, false); // Menghitung selisih hari dengan tanggal kedaluwarsa
 
-                        // Cek apakah tanggal kedaluwarsa sudah lewat
                         if ($expDate->isPast() || $daysRemaining == 0) {
-                            return 'danger'; // Merah jika sudah kedaluwarsa
+                            return 'danger';
+                        } elseif ($daysRemaining <= 30 && $daysRemaining > 0) {
+                            return 'warning';
+                        } else {
+                            return 'success';
                         }
 
-                        // Cek jika kedaluwarsa dalam waktu 30 hari atau kurang
-                        if ($daysRemaining <= 30 && $daysRemaining > 0) {
-                            return 'warning'; // Kuning jika dalam 30 hari atau kurang
-                        }
+                        // // Cek apakah tanggal kedaluwarsa sudah lewat
+                        // if ($expDate->isPast() || $daysRemaining == 0) {
+                        //     return 'danger'; // Merah jika sudah kedaluwarsa
+                        // }
 
-                        // Jika kedaluwarsa lebih dari 30 hari
-                        return 'success';
+                        // // Cek jika kedaluwarsa dalam waktu 30 hari atau kurang
+                        // if ($daysRemaining <= 30 && $daysRemaining > 0) {
+                        //     return 'warning'; // Kuning jika dalam 30 hari atau kurang
+                        // }
+
+                        // // Jika kedaluwarsa lebih dari 30 hari
+                        // return 'success';
                     })
             ])
             ->filters([

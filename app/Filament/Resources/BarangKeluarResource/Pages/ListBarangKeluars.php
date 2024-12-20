@@ -19,4 +19,8 @@ class ListBarangKeluars extends ListRecords
                 ->icon('heroicon-s-plus-circle'),
         ];
     }
+    public function getBreadcrumb(): string
+    {
+        return 'Data Distribusi Barang';
+    }
 }

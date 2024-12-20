@@ -42,9 +42,14 @@ class CreateBarangKeluar extends CreateRecord
             \Filament\Pages\Actions\ButtonAction::make('batal')
                 ->label('Batal')
                 ->url($this->getResource()::getUrl('index')) // Redirect ke halaman index
-                ->color('danger')
+                ->color('gray')
                 ->icon('heroicon-o-x-circle'),
         ];
+    }
+
+    public function getBreadcrumb(): string
+    {
+        return 'Tambah Data';
     }
 
     // Hapus error validasi pada field yang diperbarui

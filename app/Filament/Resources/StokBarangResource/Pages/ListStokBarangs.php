@@ -17,7 +17,7 @@ class ListStokBarangs extends ListRecords
             Actions\Action::make('cetak_laporan')
                 ->label('Cetak Laporan')
                 ->icon('heroicon-s-printer')
-                ->color('gray')
+                ->color('info')
                 ->url(fn() => route('stok-barang.print'))
                 ->openUrlInNewTab(),
         ];

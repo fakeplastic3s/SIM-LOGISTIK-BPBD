@@ -43,9 +43,14 @@ class CreateBarangMasuk extends CreateRecord
             \Filament\Pages\Actions\ButtonAction::make('batal')
                 ->label('Batal') // Label tombol
                 ->url($this->getResource()::getUrl('index')) // Redirect ke halaman index
-                ->color('danger') // Warna tombol
+                ->color('gray') // Warna tombol
                 ->icon('heroicon-o-x-circle'),
         ];
+    }
+
+    public function getBreadcrumb(): string
+    {
+        return 'Tambah Data';
     }
 
     // Hapus error validasi pada field yang diperbarui

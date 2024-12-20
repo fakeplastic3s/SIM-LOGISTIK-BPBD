@@ -267,7 +267,8 @@ class BarangKeluarResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\DeleteAction::make(),
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->label('Detail'),
                 Tables\Actions\Action::make('print')
                     ->label('Cetak')
                     ->icon('heroicon-s-printer')

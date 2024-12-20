@@ -18,4 +18,9 @@ class ListBarangMasuks extends ListRecords
                 ->icon('heroicon-s-plus-circle'),
         ];
     }
+
+    public function getBreadcrumb(): string
+    {
+        return 'Data Barang Masuk';
+    }
 }

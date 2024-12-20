@@ -20,6 +20,11 @@ class CreateBarang extends CreateRecord
         return 'Data berhasil disimpan'; // Ubah pesan toast
     }
 
+    public function getBreadcrumb(): string
+    {
+        return 'Tambah Data';
+    }
+
     protected function getFormActions(): array
     {
         return [
@@ -38,7 +43,7 @@ class CreateBarang extends CreateRecord
             \Filament\Pages\Actions\ButtonAction::make('batal')
                 ->label('Batal') // Label tombol
                 ->url($this->getResource()::getUrl('index')) // Redirect ke halaman index
-                ->color('danger') // Warna tombol
+                ->color('gray') // Warna tombol
                 ->icon('heroicon-o-x-circle'),
         ];
     }

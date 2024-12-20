@@ -24,4 +24,9 @@ class ViewDetail extends ViewRecord
                 ->url(url('admin/barang-keluars'))
         ];
     }
+
+    public function getBreadcrumb(): string
+    {
+        return 'Detail Data';
+    }
 }

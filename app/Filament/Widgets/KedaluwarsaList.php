@@ -11,7 +11,7 @@ use Filament\Widgets\TableWidget as BaseWidget;
 class KedaluwarsaList extends BaseWidget
 {
     protected static ?string $heading = 'List Barang Hampir Kedaluwarsa Dan Kedaluwarsa';
-    protected static ?int $sort = -3;
+    protected static ?int $sort = 2;
 
     public function table(Table $table): Table
     {

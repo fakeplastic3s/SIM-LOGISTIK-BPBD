@@ -55,7 +55,7 @@ class BarangMasukResource extends Resource
                             ->reactive()
                             ->searchable()
                             ->preload()
-                            ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->orderBy('tanggal_exp', 'asc'))
+                            ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('tanggal_exp', '>', now())->orderBy('tanggal_exp', 'asc'))
                             ->getOptionLabelFromRecordUsing(function (StokBarang $record) {
                                 $expDate = $record->tanggal_exp ? " (Expired " . Carbon::parse($record->tanggal_exp)->translatedFormat('j F Y') . ")" : "";
                                 return "{$record->merk}{$expDate}";
@@ -120,16 +120,6 @@ class BarangMasukResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('#')->state(
-                    static function (HasTable $livewire, stdClass $rowLoop): string {
-                        return (string) (
-                            $rowLoop->iteration +
-                            ($livewire->getTableRecordsPerPage() * (
-                                $livewire->getTablePage() - 1
-                            ))
-                        );
-                    }
-                ),
                 TextColumn::make('id'),
                 TextColumn::make('StokBarang.merk')
                     ->label('Nama Barang')
@@ -141,11 +131,13 @@ class BarangMasukResource extends Resource
                 TextColumn::make('tanggal_masuk')
                     ->label('Tanggal Masuk')
                     ->sortable()
-                    ->date('l, d F Y'),
+                    // ->date('l, d F Y'),
+                    ->date('j M Y'),
                 TextColumn::make('jumlah_masuk')
-                    ->label('jumlah'),
-                TextColumn::make('satuan')
-                    ->label('Satuan'),
+                    ->label('jumlah')
+                    ->formatStateUsing(function ($record) {
+                        return $record->jumlah_masuk . ' ' . $record->satuan;
+                    }),
                 TextColumn::make('sumber')
                     ->label('Sumber'),
             ])
@@ -159,7 +151,13 @@ class BarangMasukResource extends Resource
                     ->label('Kategori Barang'),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    // ->tooltip('Edit Data Barang Masuk')
+                    ->label('Edit'),
+                Tables\Actions\DeleteAction::make()
+                    ->label('Hapus'),
+
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

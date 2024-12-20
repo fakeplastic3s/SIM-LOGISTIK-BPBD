@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('barang', function (Blueprint $table) {
-            $table->string('id', length: 25)->primary();
-            $table->string('nama_barang', length: 50);
+        Schema::create('kecamatan', function (Blueprint $table) {
+            $table->string('kode')->primary(); // Custom ID sebagai primary key
+            $table->string('nama_kecamatan')->unique(); // Nama kecamatan
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('barangs');
+        Schema::dropIfExists('kecamatans');
     }
 };

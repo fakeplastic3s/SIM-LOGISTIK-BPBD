@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('barang', function (Blueprint $table) {
-            $table->string('id', length: 25)->primary();
-            $table->string('nama_barang', length: 50);
-            $table->timestamps();
+        Schema::create('jenis_bencana', function (Blueprint $table) {
+            $table->string('kode')->primary(); // Custom ID
+            $table->string('jenis_bencana')->unique(); // Nama jenis bencana
+            $table->timestamps(); // Timestamps
         });
     }
 
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('barangs');
+        Schema::dropIfExists('jenis_bencanas');
     }
 };
