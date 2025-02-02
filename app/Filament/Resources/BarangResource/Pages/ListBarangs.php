@@ -16,7 +16,7 @@ class ListBarangs extends ListRecords
             Actions\CreateAction::make()
                 ->label('Tambah Data')
                 ->icon('heroicon-s-plus-circle')
-
+                ->visible(fn() => request()->user()->name === 'Admin Logistik')
         ];
     }
     public function getBreadcrumb(): string

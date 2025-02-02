@@ -55,10 +55,11 @@ class BarangMasukResource extends Resource
                             ->reactive()
                             ->searchable()
                             ->preload()
-                            ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('tanggal_exp', '>', now())->orderBy('tanggal_exp', 'asc'))
+                            ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('tanggal_exp', '>', now())->orWhereNull('tanggal_exp')->orderBy('tanggal_exp', 'asc'))
                             ->getOptionLabelFromRecordUsing(function (StokBarang $record) {
+                                $barang = Barang::find($record->id_barang);
                                 $expDate = $record->tanggal_exp ? " (Expired " . Carbon::parse($record->tanggal_exp)->translatedFormat('j F Y') . ")" : "";
-                                return "{$record->merk}{$expDate}";
+                                return "{$barang->nama_barang} - {$record->merk}{$expDate}";
                             })
                             ->validationMessages([
                                 'required' => 'Nama barang tidak boleh kosong.',
@@ -132,7 +133,7 @@ class BarangMasukResource extends Resource
                     ->label('Tanggal Masuk')
                     ->sortable()
                     // ->date('l, d F Y'),
-                    ->date('j M Y'),
+                    ->date('d F Y'),
                 TextColumn::make('jumlah_masuk')
                     ->label('jumlah')
                     ->formatStateUsing(function ($record) {
@@ -153,9 +154,12 @@ class BarangMasukResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     // ->tooltip('Edit Data Barang Masuk')
+                    ->visible(fn() => request()->user()->name === 'Admin Logistik')
                     ->label('Edit'),
                 Tables\Actions\DeleteAction::make()
+                    ->visible(fn() => request()->user()->name === 'Admin Logistik')
                     ->label('Hapus'),
+
 
 
             ])

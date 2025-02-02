@@ -90,12 +90,13 @@ class StokBarangResource extends Resource
                         $daysRemaining = $now->diffInDays($expDate, false); // Menghitung selisih hari dengan tanggal kedaluwarsa
 
                         if ($expDate->isPast() || $daysRemaining == 0) {
-                            return 'danger';
+                            $color = 'danger'; // Merah jika sudah kedaluwarsa
                         } elseif ($daysRemaining <= 30 && $daysRemaining > 0) {
-                            return 'warning';
+                            $color = 'warning'; // Kuning jika hampir kedaluwarsa
                         } else {
-                            return 'success';
+                            $color = 'success'; // Hijau jika masih lama
                         }
+                        return $color;
 
                         // // Cek apakah tanggal kedaluwarsa sudah lewat
                         // if ($expDate->isPast() || $daysRemaining == 0) {

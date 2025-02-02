@@ -82,11 +82,12 @@ class BarangKeluarResource extends Resource
                                     ->reactive()
                                     ->searchable()
                                     ->preload()
-                                    ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->orderBy('tanggal_exp', 'asc'))
+                                    ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('stok', '>', 0)->where('tanggal_exp', '>', now())->orWhereNull('tanggal_exp')->orderBy('tanggal_exp', 'asc'))
 
                                     ->getOptionLabelFromRecordUsing(function (StokBarang $record) {
+                                        $barang = Barang::find($record->id_barang);
                                         $expDate = $record->tanggal_exp ? " (Expired " . Carbon::parse($record->tanggal_exp)->translatedFormat('j F Y') . ")" : "";
-                                        return "{$record->merk}{$expDate}";
+                                        return "{$barang->nama_barang} - {$record->merk}{$expDate}";
                                     })
                                     ->validationMessages([
                                         'required' => 'Nama barang tidak boleh kosong.',
@@ -214,17 +215,8 @@ class BarangKeluarResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(BarangKeluar::query()->orderBy('tanggal_distribusi', 'desc'))
             ->columns([
-                TextColumn::make('#')->state(
-                    static function (HasTable $livewire, stdClass $rowLoop): string {
-                        return (string) (
-                            $rowLoop->iteration +
-                            ($livewire->getTableRecordsPerPage() * (
-                                $livewire->getTablePage() - 1
-                            ))
-                        );
-                    }
-                ),
                 // TextColumn::make('id'),
                 TextColumn::make('tanggal_distribusi')
                     ->label('Tanggal Distribusi')
@@ -237,15 +229,15 @@ class BarangKeluarResource extends Resource
                     ->limit(25)
                     ->searchable(),
 
-                TextColumn::make('detailBarangKeluar')
-                    ->label('Detail Barang')
-                    ->limit(15)
-                    ->formatStateUsing(function ($record) {
-                        // dd($record->detailBarangKeluar);
-                        return $record->detailBarangKeluar
-                            ->map(fn($detail) => "{$detail->StokBarang->barang->nama_barang} {$detail->StokBarang->merk} ({$detail->jumlah_keluar} {$detail->StokBarang->satuan})")
-                            ->implode(', ');
-                    }),
+                // TextColumn::make('detailBarangKeluar')
+                //     ->label('Detail Barang')
+                //     ->limit(15)
+                //     ->formatStateUsing(function ($record) {
+                //         // dd($record->detailBarangKeluar);
+                //         return $record->detailBarangKeluar
+                //             ->map(fn($detail) => "{$detail->StokBarang->barang->nama_barang} {$detail->StokBarang->merk} ({$detail->jumlah_keluar} {$detail->StokBarang->satuan})")
+                //             ->implode(', ');
+                //     }),
                 IconColumn::make('status')
                     ->icon(fn(string $state): string => match ($state) {
                         'proses' => 'heroicon-o-clock',
@@ -265,11 +257,14 @@ class BarangKeluarResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn() => request()->user()->name === 'Admin Logistik'),
+                Tables\Actions\DeleteAction::make()
+                    ->visible(fn() => request()->user()->name === 'Admin Logistik'),
                 Tables\Actions\ViewAction::make()
                     ->label('Detail'),
                 Tables\Actions\Action::make('print')
+                    ->visible(fn(BarangKeluar $record) => $record->status === 'proses')
                     ->label('Cetak')
                     ->icon('heroicon-s-printer')
                     ->color('info')

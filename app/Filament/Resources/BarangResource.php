@@ -157,7 +157,8 @@ class BarangResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn() => request()->user()->name === 'Admin Logistik'),
                 // Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
