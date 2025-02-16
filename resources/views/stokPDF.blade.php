@@ -169,8 +169,9 @@
             <div class="tanda-tangan">
                 <br>
                 <br>
-                <p><u>Fulan bin Fulan</u></p>
-                <p style="font-size: small">NPPY: 123123123</p>
+                <br>
+                <p><b>Budi Rahardjo, AP, M.AP</b></p>
+                <p>NIP. 197601131994121001</p>
             </div>
         </footer>
     </div>

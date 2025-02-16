@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\BarangResource\Pages;
+namespace App\Filament\Resources\UsersResource\Pages;
 
-use App\Filament\Resources\BarangResource;
+use App\Filament\Resources\UsersResource;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
 
-class ListBarangs extends ListRecords
+class ListUsers extends ListRecords
 {
-    protected static string $resource = BarangResource::class;
+    protected static string $resource = UsersResource::class;
 
     protected function getHeaderActions(): array
     {
@@ -16,11 +16,11 @@ class ListBarangs extends ListRecords
             Actions\CreateAction::make()
                 ->label('Tambah Data')
                 ->icon('heroicon-s-plus-circle')
-                ->visible(fn() => \Auth::user()->role === 'admin'),
         ];
     }
+
     public function getBreadcrumb(): string
     {
-        return 'Data Barang';
+        return 'Data Pengguna';
     }
 }

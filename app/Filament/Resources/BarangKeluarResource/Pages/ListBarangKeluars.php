@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\BarangKeluarResource\Pages;
 
-use App\Filament\Resources\BarangKeluarResource;
 use Filament\Actions;
+use Illuminate\Support\Facades\Auth;
 use Filament\Resources\Pages\ListRecords;
+use App\Filament\Resources\BarangKeluarResource;
 
 class ListBarangKeluars extends ListRecords
 {
@@ -17,7 +18,7 @@ class ListBarangKeluars extends ListRecords
             Actions\CreateAction::make()
                 ->label('Tambah Data')
                 ->icon('heroicon-s-plus-circle')
-                ->visible(fn() => request()->user()->name === 'Admin Logistik'),
+                ->visible(fn() => Auth::user()->role === 'admin'),
         ];
     }
     public function getBreadcrumb(): string

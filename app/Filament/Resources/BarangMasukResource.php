@@ -55,7 +55,7 @@ class BarangMasukResource extends Resource
                             ->reactive()
                             ->searchable()
                             ->preload()
-                            ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('tanggal_exp', '>', now())->orWhereNull('tanggal_exp')->orderBy('tanggal_exp', 'asc'))
+                            ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('tanggal_exp', '>', now())->orWhereNull('tanggal_exp')->orderBy('tanggal_exp', 'asc')->orderBy('id_barang', 'asc'))
                             ->getOptionLabelFromRecordUsing(function (StokBarang $record) {
                                 $barang = Barang::find($record->id_barang);
                                 $expDate = $record->tanggal_exp ? " (Expired " . Carbon::parse($record->tanggal_exp)->translatedFormat('j F Y') . ")" : "";
@@ -154,10 +154,10 @@ class BarangMasukResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     // ->tooltip('Edit Data Barang Masuk')
-                    ->visible(fn() => request()->user()->name === 'Admin Logistik')
+                    ->visible(fn() => \Auth::user()->role === 'admin')
                     ->label('Edit'),
                 Tables\Actions\DeleteAction::make()
-                    ->visible(fn() => request()->user()->name === 'Admin Logistik')
+                    ->visible(fn() => \Auth::user()->role === 'admin')
                     ->label('Hapus'),
 
 

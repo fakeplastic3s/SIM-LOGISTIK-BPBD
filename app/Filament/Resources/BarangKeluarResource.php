@@ -82,7 +82,7 @@ class BarangKeluarResource extends Resource
                                     ->reactive()
                                     ->searchable()
                                     ->preload()
-                                    ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('stok', '>', 0)->where('tanggal_exp', '>', now())->orWhereNull('tanggal_exp')->orderBy('tanggal_exp', 'asc'))
+                                    ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('stok', '>', 0)->where('tanggal_exp', '>', now())->orWhereNull('tanggal_exp')->orderBy('tanggal_exp', 'asc')->orderBy('id_barang', 'asc'))
 
                                     ->getOptionLabelFromRecordUsing(function (StokBarang $record) {
                                         $barang = Barang::find($record->id_barang);
@@ -258,9 +258,9 @@ class BarangKeluarResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make()
-                    ->visible(fn() => request()->user()->name === 'Admin Logistik'),
+                    ->visible(fn() => \Auth::user()->role === 'admin'),
                 Tables\Actions\DeleteAction::make()
-                    ->visible(fn() => request()->user()->name === 'Admin Logistik'),
+                    ->visible(fn() => \Auth::user()->role === 'admin'),
                 Tables\Actions\ViewAction::make()
                     ->label('Detail'),
                 Tables\Actions\Action::make('print')
@@ -295,47 +295,49 @@ class BarangKeluarResource extends Resource
         ];
     }
 
-    public static function infolist(Infolist $infolist): Infolist
-    {
-        return $infolist
-            ->schema([
-                // Informasi Transaksi
-                Group::make()
-                    ->schema([
-                        TextEntry::make('id')
-                            ->label('ID Transaksi'),
+    // public static function infolist(Infolist $infolist): Infolist
+    // {
+    //     return $infolist
 
-                        TextEntry::make('tanggal_distribusi')
-                            ->label('Tanggal Distribusi')
-                            ->formatStateUsing(fn($state) => \Carbon\Carbon::parse($state)->translatedFormat('d F Y')),
+    //         ->schema([
+    //             // Informasi Transaksi
+    //             // Card::make(),
+    //             Group::make()
+    //                 ->schema([
+    //                     TextEntry::make('id')
+    //                         ->label('ID Transaksi'),
 
-                        TextEntry::make('nama_penerima')
-                            ->label('Nama Penerima'),
+    //                     TextEntry::make('tanggal_distribusi')
+    //                         ->label('Tanggal Distribusi')
+    //                         ->formatStateUsing(fn($state) => \Carbon\Carbon::parse($state)->translatedFormat('d F Y')),
 
-                        TextEntry::make('alamat_penerima')
-                            ->label('Alamat Penerima'),
+    //                     TextEntry::make('nama_penerima')
+    //                         ->label('Nama Penerima'),
+
+    //                     TextEntry::make('alamat_penerima')
+    //                         ->label('Alamat Penerima'),
 
 
-                    ]),
+    //                 ]),
 
-                // Detail Barang
-                Group::make()
-                    ->schema([
-                        TextEntry::make('detailBarangKeluar')
-                            ->label('Detail Barang')
-                            ->state(
-                                fn($record) =>
-                                $record->detailBarangKeluar->map(
-                                    fn($detail) =>
-                                    "{$detail->StokBarang->barang->nama_barang} {$detail->StokBarang->merk} ({$detail->jumlah_keluar} {$detail->stokBarang->satuan})"
-                                )->implode(', ')
-                            ),
-                        ImageEntry::make('foto')
-                            ->label('Bukti Gambar')
-                            ->height(200)
-                            ->width(200),
+    //             // Detail Barang
+    //             Group::make()
+    //                 ->schema([
+    //                     TextEntry::make('detailBarangKeluar')
+    //                         ->label('Detail Barang')
+    //                         ->state(
+    //                             fn($record) =>
+    //                             $record->detailBarangKeluar->map(
+    //                                 fn($detail) =>
+    //                                 "{$detail->StokBarang->barang->nama_barang} {$detail->StokBarang->merk} ({$detail->jumlah_keluar} {$detail->stokBarang->satuan})"
+    //                             )->implode(', ')
+    //                         ),
+    //                     ImageEntry::make('foto')
+    //                         ->label('Bukti Gambar')
+    //                         ->height(200)
+    //                         ->width(200),
 
-                    ]),
-            ]);
-    }
+    //                 ]),
+    //         ]);
+    // }
 }
