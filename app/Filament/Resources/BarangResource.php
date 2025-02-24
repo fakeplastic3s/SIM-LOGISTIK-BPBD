@@ -114,8 +114,8 @@ class BarangResource extends Resource
                                 Select::make('kategori')
                                     ->required()
                                     ->options([
-                                        'Barang Kedaluwarsa' => 'Barang Kedaluwarsa',
-                                        'Barang Non-Kedaluwarsa' => 'Barang Non-Kedaluwarsa',
+                                        'Sandang' => 'Sandang',
+                                        'Pangan' => 'Pangan',
                                     ])
                                     ->reactive()
                                     ->validationMessages([

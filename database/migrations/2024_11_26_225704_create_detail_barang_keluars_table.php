@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('id_barang', length: 25);
             $table->foreign('id_barang')->references('id')->on('stok_barang')->onUpdate('cascade')->onDelete('cascade');
             $table->integer('jumlah_keluar');
-            $table->enum('satuan', ['pcs', 'kg', 'gr', 'ml', 'liter', 'box']);
+            $table->enum('satuan', ['pcs', 'kg', 'g', 'ml', 'liter', 'box']);
             $table->timestamps();
         });
     }

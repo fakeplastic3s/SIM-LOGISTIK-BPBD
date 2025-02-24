@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('barang_masuk', function (Blueprint $table) {
             $table->string('id', length: 25)->primary();
-            $table->string('id_barang', length: 25);
-            $table->foreign('id_barang')->references('id')->on('stok_barang')->onUpdate('cascade')->onDelete('cascade');
+            $table->string('merk', length: 25);
             $table->date('tanggal_masuk');
+            $table->date('tanggal_exp')->nullable();
             $table->integer('jumlah_masuk');
-            $table->enum('satuan', ['pcs', 'kg', 'gr', 'ml', 'liter', 'box']);
+            $table->enum('satuan', ['pcs', 'kg', 'g', 'ml', 'liter', 'box']);
             $table->enum('sumber', ['APBD Provinsi Jawa Tengah', 'APBD Kabupaten Pekalongan', 'Masyarakat']);
             $table->timestamps();
         });

@@ -48,18 +48,42 @@ class BarangMasukResource extends Resource
                             ->label('Item ID')
                             ->required(),
 
-                        Select::make('id_barang')
+                        // Select::make('id_barang')
+                        //     ->columnSpan(2)
+                        //     ->label('Nama Barang')
+                        //     ->required()
+                        //     ->reactive()
+                        //     ->searchable()
+                        //     ->preload()
+                        //     ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('tanggal_exp', '>', now())->orWhereNull('tanggal_exp')->orderBy('tanggal_exp', 'asc')->orderBy('id_barang', 'asc'))
+                        //     ->getOptionLabelFromRecordUsing(function (StokBarang $record) {
+                        //         $barang = Barang::find($record->id_barang);
+                        //         $expDate = $record->tanggal_exp ? " (Expired " . Carbon::parse($record->tanggal_exp)->translatedFormat('j F Y') . ")" : "";
+                        //         return "{$barang->nama_barang} - {$record->merk}{$expDate}";
+                        //     })
+                        //     ->validationMessages([
+                        //         'required' => 'Nama barang tidak boleh kosong.',
+                        //     ]),
+                        Select::make('merk')
                             ->columnSpan(2)
                             ->label('Nama Barang')
                             ->required()
                             ->reactive()
                             ->searchable()
                             ->preload()
-                            ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('tanggal_exp', '>', now())->orWhereNull('tanggal_exp')->orderBy('tanggal_exp', 'asc')->orderBy('id_barang', 'asc'))
-                            ->getOptionLabelFromRecordUsing(function (StokBarang $record) {
-                                $barang = Barang::find($record->id_barang);
-                                $expDate = $record->tanggal_exp ? " (Expired " . Carbon::parse($record->tanggal_exp)->translatedFormat('j F Y') . ")" : "";
-                                return "{$barang->nama_barang} - {$record->merk}{$expDate}";
+                            ->options(function () {
+                                return StokBarang::select('merk')
+                                    ->distinct()
+                                    ->where('tanggal_exp', '>', now())
+                                    ->orWhereNull('tanggal_exp')
+                                    ->orderBy('merk', 'asc')
+                                    ->pluck('merk', 'merk');
+                            })
+                            ->getOptionLabelUsing(function ($value) {
+                                $stokBarang = StokBarang::where('merk', $value)->first();
+                                $barang = Barang::find($stokBarang->id_barang);
+                                $expDate = $stokBarang->tanggal_exp ? " (Expired " . Carbon::parse($stokBarang->tanggal_exp)->translatedFormat('j F Y') . ")" : "";
+                                return "{$barang->nama_barang} - {$stokBarang->merk}{$expDate}";
                             })
                             ->validationMessages([
                                 'required' => 'Nama barang tidak boleh kosong.',
@@ -74,6 +98,17 @@ class BarangMasukResource extends Resource
                             ->native(false)
                             ->validationMessages([
                                 'required' => 'Tanggal masuk tidak boleh kosong.',
+                            ]),
+                        DatePicker::make('tanggal_exp')
+                            ->label('Tanggal Kedaluwarsa')
+                            ->columnSpan(2)
+                            ->prefixIcon('heroicon-m-calendar-days')
+                            ->closeOnDateSelection()
+                            ->required()
+                            ->reactive()
+                            ->native(false)
+                            ->validationMessages([
+                                'required' => 'Tanggal kedaluwarsa tidak boleh kosong.',
                             ]),
                         TextInput::make('jumlah_masuk')
                             ->label('Jumlah')
@@ -122,13 +157,10 @@ class BarangMasukResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('id'),
-                TextColumn::make('StokBarang.merk')
+                TextColumn::make('merk')
                     ->label('Nama Barang')
                     ->searchable()
-                    ->sortable()
-                    ->getStateUsing(function ($record) {
-                        return $record->stokBarang->barang->nama_barang . ' ' . $record->stokBarang->merk;
-                    }),
+                    ->sortable(),
                 TextColumn::make('tanggal_masuk')
                     ->label('Tanggal Masuk')
                     ->sortable()

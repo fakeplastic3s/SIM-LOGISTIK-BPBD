@@ -73,9 +73,7 @@ class DetailBarangKeluar extends Model
 
         // Event saat data dihapus
         static::deleting(function ($detailBarangKeluar) {
-            dd('test detail');
             $barang = \App\Models\StokBarang::find($detailBarangKeluar->id_barang);
-            dd($barang);
             if ($barang) {
                 // Kembalikan stok barang
                 $barang->stok += $detailBarangKeluar->jumlah_keluar;
