@@ -34,6 +34,12 @@ class BarangMasukResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-archive-box-arrow-down';
     protected static ?int $navigationSort = 2;
 
+    public static function canViewAny(): bool
+    {
+
+        return \Auth::user()->role === 'admin' || \Auth::user()->role === 'kepala';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -163,6 +169,11 @@ class BarangMasukResource extends Resource
                     ->sortable(),
                 TextColumn::make('tanggal_masuk')
                     ->label('Tanggal Masuk')
+                    ->sortable()
+                    // ->date('l, d F Y'),
+                    ->date('d F Y'),
+                TextColumn::make('tanggal_exp')
+                    ->label('Tanggal Kedaluwarsa')
                     ->sortable()
                     // ->date('l, d F Y'),
                     ->date('d F Y'),

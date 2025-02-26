@@ -19,7 +19,6 @@ class KedaluwarsaList extends BaseWidget
             ->emptyStateHeading('Tidak Ada Barang Hampir Kedaluwarsa Dan Kedaluwarsa')
             ->query(
                 StokBarang::query()
-                    ->where('kategori', 'Barang Kedaluwarsa')
                     ->where('tanggal_exp', '<=', now()->addDays(30))
                     ->where('stok', '>', 0)
                     ->orderBy('tanggal_exp', 'asc')

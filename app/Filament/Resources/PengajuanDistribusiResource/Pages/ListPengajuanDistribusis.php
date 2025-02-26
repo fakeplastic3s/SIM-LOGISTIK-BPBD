@@ -18,7 +18,7 @@ class ListPengajuanDistribusis extends ListRecords
             Actions\CreateAction::make()
                 ->label('Tambah Data')
                 ->icon('heroicon-s-plus-circle')
-            // ->visible(fn() => \Auth::user()->role === 'pusdalops'),
+                ->visible(fn() => \Auth::user()->role === 'pusdalops'),
         ];
     }
     public function getBreadcrumb(): string

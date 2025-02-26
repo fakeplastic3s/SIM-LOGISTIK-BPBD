@@ -32,6 +32,7 @@ class PengajuanDistribusiResource extends Resource
     protected static ?int $navigationSort = 4;
     protected static ?string $navigationIcon = 'heroicon-o-numbered-list';
 
+
     public static function form(Form $form): Form
     {
         return $form
@@ -143,9 +144,17 @@ class PengajuanDistribusiResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()
+                    ->visible(fn() => \Auth::user()->role === 'pusdalops'),
                 Tables\Actions\ViewAction::make()
                     ->label('Detail'),
+
+                Tables\Actions\Action::make('print')
+                    ->label('Cetak')
+                    ->icon('heroicon-s-printer')
+                    ->color('info')
+                    ->url(fn(PengajuanDistribusi $record) => route('pengajuan.print', $record))
+                    ->openUrlInNewTab(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

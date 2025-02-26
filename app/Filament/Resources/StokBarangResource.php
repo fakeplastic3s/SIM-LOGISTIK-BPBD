@@ -37,6 +37,12 @@ class StokBarangResource extends Resource
             ]);
     }
 
+    public static function canViewAny(): bool
+    {
+
+        return \Auth::user()->role === 'admin' || \Auth::user()->role === 'kepala';
+    }
+
     public static function table(Table $table): Table
     {
         return $table
@@ -115,8 +121,8 @@ class StokBarangResource extends Resource
             ->filters([
                 SelectFilter::make('kategori')
                     ->options([
-                        'Barang Kedaluwarsa' => 'Kedaluwarsa',
-                        'Barang Non-Kedaluwarsa' => 'Non-Kedaluwarsa',
+                        'Sandang' => 'Sandang',
+                        'Pangan' => 'Pangan',
                     ])
                     ->label('Kategori Barang'),
             ])
