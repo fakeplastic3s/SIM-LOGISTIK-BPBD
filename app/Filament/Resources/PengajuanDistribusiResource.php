@@ -26,8 +26,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class PengajuanDistribusiResource extends Resource
 {
     protected static ?string $model = PengajuanDistribusi::class;
-    protected static ?string $navigationLabel = 'Pengajuan Barang Distribusi';
-    protected static ?string $modelLabel = 'Pengajuan Barang Distribusi';
+    protected static ?string $navigationLabel = 'Pengajuan Distribusi Barang';
+    protected static ?string $modelLabel = 'Pengajuan Distribusi Barang';
     protected static ?string $navigationGroup = 'Transaksi';
     protected static ?int $navigationSort = 4;
     protected static ?string $navigationIcon = 'heroicon-o-numbered-list';
@@ -130,7 +130,7 @@ class PengajuanDistribusiResource extends Resource
             ->query(PengajuanDistribusi::query()->orderBy('tanggal_pengajuan', 'desc'))
             ->columns([
                 TextColumn::make('tanggal_pengajuan')
-                    ->label('Tanggal Distribusi')
+                    ->label('Tanggal Pengajuan')
                     ->sortable()
                     ->date('d F Y'),
                 TextColumn::make('nama_penerima')
