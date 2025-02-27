@@ -88,7 +88,7 @@ class BarangKeluarResource extends Resource
                                     ->reactive()
                                     ->searchable()
                                     ->preload()
-                                    ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('stok', '>', 0)->where('tanggal_exp', '>', now())->orWhereNull('tanggal_exp')->orderBy('tanggal_exp', 'asc')->orderBy('id_barang', 'asc'))
+                                    ->relationship('StokBarang', 'merk', modifyQueryUsing: fn(Builder $query) => $query->where('tanggal_exp', '>', now())->orWhereNull('tanggal_exp')->where('stok', '>', 0)->orderBy('tanggal_exp', 'asc')->orderBy('id_barang', 'asc'))
 
                                     ->getOptionLabelFromRecordUsing(function (StokBarang $record) {
                                         $barang = Barang::find($record->id_barang);
@@ -156,7 +156,6 @@ class BarangKeluarResource extends Resource
 
                             ]),
                         // ->columnSpan('full'),
-
                         DatePicker::make('tanggal_distribusi')
                             ->label('Tanggal Distribusi')
                             ->columnSpan(2)
@@ -165,9 +164,32 @@ class BarangKeluarResource extends Resource
                             ->required()
                             ->reactive()
                             ->native(false)
+                            ->rule(function ($get) {
+                                $tanggalDistribusi = $get('tanggal_distribusi');
+                                $detailBarangKeluar = $get('detailBarangKeluar');
+                                foreach ($detailBarangKeluar as $detail) {
+                                    $stokBarang = StokBarang::find($detail['id_barang']);
+                                    if ($stokBarang && $stokBarang->tanggal_exp && Carbon::parse($tanggalDistribusi)->gt(Carbon::parse($stokBarang->tanggal_exp))) {
+                                        return 'prohibited';
+                                    }
+                                }
+                                return null;
+                            })
                             ->validationMessages([
                                 'required' => 'Tanggal distribusi tidak boleh kosong.',
+                                'prohibited' => 'Tanggal distribusi tidak boleh melewati tanggal kadaluarsa barang.',
                             ]),
+                        // DatePicker::make('tanggal_distribusi')
+                        //     ->label('Tanggal Distribusi')
+                        //     ->columnSpan(2)
+                        //     ->prefixIcon('heroicon-m-calendar-days')
+                        //     ->closeOnDateSelection()
+                        //     ->required()
+                        //     ->reactive()
+                        //     ->native(false)
+                        //     ->validationMessages([
+                        //         'required' => 'Tanggal distribusi tidak boleh kosong.',
+                        //     ]),
                         TextInput::make('nama_penerima')
                             ->columnSpan(2)
                             ->label('Nama Penerima')

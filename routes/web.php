@@ -7,5 +7,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('cetak', [PDFController::class, 'cetakLaporan'])->name('stok-barang.print');
-Route::get('cetak/{id}', [PDFController::class, 'cetakLaporanDistribusi'])->name('distribusi.print');
+Route::get('cetakDistribusi/{id}', [PDFController::class, 'cetakLaporanDistribusi'])->name('distribusi.print');
 Route::get('cetak/{id}', [PDFController::class, 'cetakLaporanPengajuanDistribusi'])->name('pengajuan.print');
