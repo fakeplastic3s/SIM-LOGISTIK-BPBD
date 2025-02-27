@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Barang;
 use App\Models\BarangKeluar;
 use App\Models\DetailBarangKeluar;
+use App\Models\PengajuanDistribusi;
 use Carbon\Carbon;
 use App\Models\StokBarang;
 use Illuminate\Http\Request;
@@ -51,6 +52,27 @@ class PDFController extends Controller
         return response()->streamDownload(
             fn() => print($pdf->output()),
             'berita-acara-serah-terima-bantuan-logistik-' . now()->format('Ymd') . '.pdf'
+        );
+    }
+    public function cetakLaporanPengajuanDistribusi($id)
+    {
+        // Ambil semua data stok barang
+        $pengajuanDistribusi = PengajuanDistribusi::with('detailPengajuan')->findOrFail($id);
+        // return $distribusi;
+        // $data = [
+        //     'date' => date('Y-m-d'),
+        //     'time' => date('H:i:s'),
+        //     'distribusi' => $distribusi
+        // ];
+        // dd($data);
+
+        // Generate PDF menggunakan view
+        $pdf = PDF::loadView('pengajuanDistribusiPDF', compact('pengajuanDistribusi'));
+
+        // Unduh file PDF
+        return response()->streamDownload(
+            fn() => print($pdf->output()),
+            'pengajuan-distribusi-' . now()->format('Ymd') . '.pdf'
         );
     }
 }

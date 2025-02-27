@@ -39,6 +39,12 @@ class BarangResource extends Resource
     protected static ?string $modelLabel = 'Barang';
     protected static ?string $navigationGroup = 'Data Master';
 
+    public static function canViewAny(): bool
+    {
+
+        return \Auth::user()->role === 'admin' || \Auth::user()->role === 'kepala';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -114,8 +120,8 @@ class BarangResource extends Resource
                                 Select::make('kategori')
                                     ->required()
                                     ->options([
-                                        'Barang Kedaluwarsa' => 'Barang Kedaluwarsa',
-                                        'Barang Non-Kedaluwarsa' => 'Barang Non-Kedaluwarsa',
+                                        'Sandang' => 'Sandang',
+                                        'Pangan' => 'Pangan',
                                     ])
                                     ->reactive()
                                     ->validationMessages([
@@ -159,7 +165,7 @@ class BarangResource extends Resource
             ->actions([
                 Tables\Actions\EditAction::make()
                     ->visible(fn() => \Auth::user()->role === 'admin'),
-                // Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -182,7 +188,7 @@ class BarangResource extends Resource
             'index' => Pages\ListBarangs::route('/'),
             'create' => Pages\CreateBarang::route('/create'),
             'edit' => Pages\EditBarang::route('/{record}/edit'),
-            // 'view' => Pages\ViewDetailBarang::route('/{record}'),
+            'view' => Pages\ViewDetailBarang::route('/{record}'),
 
         ];
     }

@@ -45,6 +45,12 @@ class BarangKeluarResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-o-map';
     protected static ?int $navigationSort = 3;
 
+    public static function canViewAny(): bool
+    {
+
+        return \Auth::user()->role === 'admin' || \Auth::user()->role === 'kepala';
+    }
+
     public static function form(Form $form): Form
     {
         return $form
