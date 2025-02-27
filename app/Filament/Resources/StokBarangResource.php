@@ -85,6 +85,15 @@ class StokBarangResource extends Resource
                 //     ->formatStateUsing(function ($record) {
                 //         return $record->StokBarang->sum('stok'); // Hitung total stok
                 //     }),
+                TextColumn::make('kategori')
+                    ->label('Kategori')
+                    ->searchable()
+                    ->sortable()
+                    ->badge()
+                    ->color(fn(string $state): string => match ($state) {
+                        'Pangan' => 'primary',
+                        'Sandang' => 'info',
+                    }),
                 TextColumn::make('tanggal_exp')
                     ->label('Kedaluwarsa')
                     ->sortable()
